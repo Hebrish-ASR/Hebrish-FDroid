@@ -1,0 +1,106 @@
+name: Publish F-Droid repo
+
+# Rebuilds the repo from the Android releases of Hebrish-ASR/Hebrish-Dictation and deploys
+# it to GitHub Pages (https://fdroid.hebrish.app/repo). The scheduled run only rebuilds
+# when a release is missing from the published index; a manual run or a push always does.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [android-release]
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  SRC_REPO: Hebrish-ASR/Hebrish-Dictation
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      rebuild: ${{ steps.check.outputs.rebuild }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for new releases
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "rebuild=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          tags=$(gh release list -R "$SRC_REPO" --limit 200 --json tagName,isDraft,isPrerelease \
+            -q '.[] | select(.isDraft|not) | select(.isPrerelease|not) | .tagName' | grep '^android-v' \
+            | while read -r t; do v=${t#android-v}; [ "$(printf '%s\n0.2.0\n' "$v" | sort -V | head -1)" = "0.2.0" ] && echo "$t"; done)
+          if echo "$tags" | python3 scripts/needs_rebuild.py; then echo "rebuild=true" >> "$GITHUB_OUTPUT"; else echo "rebuild=false" >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/setup-python@v5
+        if: steps.check.outputs.rebuild == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Install fdroidserver
+        if: steps.check.outputs.rebuild == 'true'
+        run: pip install fdroidserver==2.4.5
+
+      # tmp/apkcache.json keeps each APK's "added" date stable across rebuilds.
+      - uses: actions/cache@v4
+        if: steps.check.outputs.rebuild == 'true'
+        with:
+          path: fdroid/tmp
+          key: fdroid-tmp-${{ github.run_id }}
+          restore-keys: fdroid-tmp-
+
+      - name: Fetch APKs
+        if: steps.check.outputs.rebuild == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/fetch_apks.sh fdroid/repo
+
+      - name: Build and sign index
+        if: steps.check.outputs.rebuild == 'true'
+        working-directory: fdroid
+        env:
+          FDROID_KEYSTORE_B64: ${{ secrets.FDROID_KEYSTORE_B64 }}
+          FDROID_KEY_PASSWORD: ${{ secrets.FDROID_KEY_PASSWORD }}
+        run: |
+          echo "$FDROID_KEYSTORE_B64" | base64 -d > keystore.p12
+          chmod 600 config.yml keystore.p12
+          fdroid update --verbose
+          rm keystore.p12
+
+      - name: Assemble site
+        if: steps.check.outputs.rebuild == 'true'
+        run: |
+          mkdir -p site
+          cp -r fdroid/repo site/repo
+          cat > site/index.html <<'HTML'
+          <!doctype html><meta charset="utf-8"><title>Hebrish F-Droid repo</title>
+          <meta http-equiv="refresh" content="0; url=https://hebrish.app/download#fdroid">
+          <p>Hebrish F-Droid repository: <a href="/repo/">/repo</a>. Instructions: <a href="https://hebrish.app/download#fdroid">hebrish.app/download</a>.</p>
+          HTML
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.check.outputs.rebuild == 'true'
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.rebuild == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

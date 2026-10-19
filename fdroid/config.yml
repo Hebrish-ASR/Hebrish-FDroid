@@ -1,0 +1,26 @@
+# F-Droid repo config. Secrets are not here: keystorepass/keypass come from the
+# environment (FDROID_KEY_PASSWORD) and keystore.p12 is written by the workflow
+# from the FDROID_KEYSTORE_B64 secret. See README.md, "Signing key".
+sdk_path: $ANDROID_HOME
+
+repo_url: https://fdroid.hebrish.app/repo
+repo_name: Hebrish
+# repo_icon is resolved from the cwd: the source is fdroid/icon.png, which fdroid update
+# copies into repo/icons/. A file placed in repo/icons/ directly is replaced by a placeholder.
+repo_icon: icon.png
+repo_description: >-
+  Official F-Droid repository for Hebrish: on-device English dictation that writes
+  Hebrew words (romanized) correctly. Apps are built and signed by the Hebrish project
+  (GitHub: Hebrish-ASR/Hebrish-Dictation). Website: https://hebrish.app
+
+archive_older: 0
+
+keystore: keystore.p12
+repo_keyalias: hebrish
+keydname: CN=Hebrish, OU=F-Droid, O=Hebrish, C=IL
+keystorepass:
+  env: FDROID_KEY_PASSWORD
+keypass:
+  env: FDROID_KEY_PASSWORD
+
+make_current_version_link: false

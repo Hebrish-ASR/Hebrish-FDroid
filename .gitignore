@@ -1,0 +1,9 @@
+# Everything fdroid generates is rebuilt by the workflow; only inputs are tracked.
+fdroid/keystore.p12
+fdroid/repo/
+fdroid/archive/
+fdroid/tmp/
+fdroid/stats/
+fdroid/status/
+fdroid/.*
+site/

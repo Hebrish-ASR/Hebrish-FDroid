@@ -1,0 +1,31 @@
+Categories:
+  - Keyboard & IME
+  - Writing
+License: MIT
+AuthorName: Hebrish
+AuthorWebSite: https://hebrish.app
+WebSite: https://hebrish.app
+SourceCode: https://github.com/Hebrish-ASR/Hebrish-Dictation
+IssueTracker: https://github.com/Hebrish-ASR/Hebrish-Dictation/issues
+Changelog: https://hebrish.app/changelog
+
+Name: Hebrish
+Summary: On-device dictation that writes Hebrew words in English correctly
+Description: |-
+  Hebrish is on-device English dictation for people who mix Hebrew words into their
+  English: teudat zehut, arnona, bituach leumi. Those words come out in the standard
+  romanized spelling instead of as nonsense.
+
+  It runs NVIDIA Parakeet TDT 0.6B v2 on your phone (sherpa-onnx, int8). Choose stock
+  Parakeet, or the English-Hebrew code-switching fine-tune. The only network traffic is
+  the one-time model download (about 630 MB, from cdn.hebrish.app) and a periodic check
+  for a newer model.
+
+  The code-switching fine-tune is trained on one speaker's voice, so it works best for
+  voices like that one; stock Parakeet is the better choice for anyone else.
+
+  arm64 devices only, Android 9 or newer. Free for personal and non-commercial use;
+  commercial use needs a licence: https://hebrish.app/terms
+
+AutoUpdateMode: None
+UpdateCheckMode: None
