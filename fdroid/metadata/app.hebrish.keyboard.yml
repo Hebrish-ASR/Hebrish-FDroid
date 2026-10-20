@@ -1,0 +1,38 @@
+Categories:
+  - Keyboard & IME
+  - Writing
+License: GPL-3.0-only
+AuthorName: Hebrish
+AuthorWebSite: https://hebrish.app
+WebSite: https://hebrish.app
+SourceCode: https://github.com/Hebrish-ASR/Hebrish-Keyboard
+IssueTracker: https://github.com/Hebrish-ASR/Hebrish-Keyboard/issues
+Changelog: https://github.com/Hebrish-ASR/Hebrish-Keyboard/releases
+
+Name: Hebrish Keyboard
+Summary: HeliBoard with Hebrish dictation on the mic key
+Description: |-
+  A full keyboard for people who mix Hebrew words into their English. It is HeliBoard,
+  the open-source keyboard, with Hebrish dictation built into the mic key: tap to talk,
+  tap again to insert. Hebrew words such as teudat zehut, arnona and bituach leumi come
+  out in the standard romanized spelling.
+
+  Early: released before testing on a phone. Please report problems on the issue
+  tracker, not to HeliBoard.
+
+  All keyboard features are HeliBoard's (by Helium314 and contributors). This build adds
+  the microphone permission and, unlike HeliBoard, internet access: it is used for the
+  one-time model download (about 660 MB) and a check for a newer model. It installs
+  alongside HeliBoard. Each new stable HeliBoard release is merged and re-released
+  automatically.
+
+  The code-switching model is trained on one speaker's voice, so it works best for
+  voices like that one.
+
+  If you prefer to keep your own keyboard, install the Hebrish app instead; installing
+  both downloads the model twice.
+
+  arm64 devices only.
+
+AutoUpdateMode: None
+UpdateCheckMode: None

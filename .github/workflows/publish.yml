@@ -1,6 +1,7 @@
 name: Publish F-Droid repo
 
-# Rebuilds the repo from the Android releases of Hebrish-ASR/Hebrish-App and deploys
+# Rebuilds the repo from the Android releases of Hebrish-ASR/Hebrish-App and
+# Hebrish-ASR/Hebrish-Keyboard and deploys
 # it to GitHub Pages (https://fdroid.hebrish.app/repo). The scheduled run only rebuilds
 # when a release is missing from the published index; a manual run or a push always does.
 on:
@@ -23,6 +24,7 @@ concurrency:
 
 env:
   SRC_REPO: Hebrish-ASR/Hebrish-App
+  KBD_REPO: Hebrish-ASR/Hebrish-Keyboard
 
 jobs:
   build:
@@ -37,12 +39,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # The loop must end with status 0: `[ ... ] && echo` on a skipped 0.1.x tag made the
-          # assignment fail under bash -e, so every scheduled run died here (2026-10-20).
+          # fetch_apks.sh's loops must end with status 0: `[ ... ] && echo` on a skipped 0.1.x
+          # tag once made this step fail under bash -e, so every scheduled run died (2026-10-20).
           if [ "${{ github.event_name }}" != "schedule" ]; then echo "rebuild=true" >> "$GITHUB_OUTPUT"; exit 0; fi
-          tags=$(gh release list -R "$SRC_REPO" --limit 200 --json tagName,isDraft,isPrerelease \
-            -q '.[] | select(.isDraft|not) | select(.isPrerelease|not) | .tagName' | grep '^android-v' \
-            | while read -r t; do v=${t#android-v}; if [ "$(printf '%s\n0.2.0\n' "$v" | sort -V | head -1)" = "0.2.0" ]; then echo "$t"; fi; done)
+          tags=$(scripts/fetch_apks.sh --tags)
           if echo "$tags" | python3 scripts/needs_rebuild.py; then echo "rebuild=true" >> "$GITHUB_OUTPUT"; else echo "rebuild=false" >> "$GITHUB_OUTPUT"; fi
 
       - uses: actions/setup-python@v5
