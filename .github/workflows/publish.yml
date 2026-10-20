@@ -1,6 +1,6 @@
 name: Publish F-Droid repo
 
-# Rebuilds the repo from the Android releases of Hebrish-ASR/Hebrish-Dictation and deploys
+# Rebuilds the repo from the Android releases of Hebrish-ASR/Hebrish-App and deploys
 # it to GitHub Pages (https://fdroid.hebrish.app/repo). The scheduled run only rebuilds
 # when a release is missing from the published index; a manual run or a push always does.
 on:
@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  SRC_REPO: Hebrish-ASR/Hebrish-Dictation
+  SRC_REPO: Hebrish-ASR/Hebrish-App
 
 jobs:
   build:

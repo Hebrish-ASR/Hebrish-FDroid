@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Download every Hebrish Android release APK (tags android-v*, application ID
-# app.hebrish.dictation) from Hebrish-ASR/Hebrish-Dictation into fdroid/repo/.
+# app.hebrish.dictation) from Hebrish-ASR/Hebrish-App into fdroid/repo/.
 # Releases before 0.2.0 shipped as com.danielrosehill.parlance and are skipped.
 set -euo pipefail
-SRC=${SRC_REPO:-Hebrish-ASR/Hebrish-Dictation}
+SRC=${SRC_REPO:-Hebrish-ASR/Hebrish-App}
 DEST=${1:-fdroid/repo}
 mkdir -p "$DEST"
 gh release list -R "$SRC" --limit 200 --json tagName,isDraft,isPrerelease \

@@ -11,7 +11,7 @@ repo_icon: icon.png
 repo_description: >-
   Official F-Droid repository for Hebrish: on-device English dictation that writes
   Hebrew words (romanized) correctly. Apps are built and signed by the Hebrish project
-  (GitHub: Hebrish-ASR/Hebrish-Dictation). Website: https://hebrish.app
+  (GitHub: Hebrish-ASR/Hebrish-App). Website: https://hebrish.app
 
 archive_older: 0
 

@@ -11,7 +11,7 @@ F-Droid client (or Neo Store, Droid-ify) and Hebrish installs and updates like a
 | Instructions for users | <https://hebrish.app/download#fdroid> |
 
 This is a binary repository: the APKs are the ones built and signed by the release workflow of
-[Hebrish-ASR/Hebrish-Dictation](https://github.com/Hebrish-ASR/Hebrish-Dictation) (tags
+[Hebrish-ASR/Hebrish-App](https://github.com/Hebrish-ASR/Hebrish-App) (tags
 `android-v*`), not rebuilt from source by F-Droid. The APK signing certificate is
 `5CF6822350D0B2FF124021A0DF10BEC1C63A6E5E6159FA6029507134A1446994` (the same key as the
 GitHub and CDN downloads, so an app installed from either updates from here). The repo signing

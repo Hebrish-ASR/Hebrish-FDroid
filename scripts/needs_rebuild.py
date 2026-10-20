@@ -2,7 +2,7 @@
 """Exit 0 (rebuild) when the published index lacks an Android release; exit 1 when up to date.
 
 Compares the versionNames in https://fdroid.hebrish.app/repo/index-v2.json with the
-android-v* release tags (0.2.0 and later) of Hebrish-ASR/Hebrish-Dictation, passed one
+android-v* release tags (0.2.0 and later) of Hebrish-ASR/Hebrish-App, passed one
 per line on stdin. A missing or unreadable index means rebuild.
 """
 import json
