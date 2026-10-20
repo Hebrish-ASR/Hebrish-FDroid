@@ -10,7 +10,7 @@ on:
   repository_dispatch:
     types: [android-release]
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "17 * * * *"
 
 permissions:
   contents: read
@@ -37,10 +37,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # The loop must end with status 0: `[ ... ] && echo` on a skipped 0.1.x tag made the
+          # assignment fail under bash -e, so every scheduled run died here (2026-10-20).
           if [ "${{ github.event_name }}" != "schedule" ]; then echo "rebuild=true" >> "$GITHUB_OUTPUT"; exit 0; fi
           tags=$(gh release list -R "$SRC_REPO" --limit 200 --json tagName,isDraft,isPrerelease \
             -q '.[] | select(.isDraft|not) | select(.isPrerelease|not) | .tagName' | grep '^android-v' \
-            | while read -r t; do v=${t#android-v}; [ "$(printf '%s\n0.2.0\n' "$v" | sort -V | head -1)" = "0.2.0" ] && echo "$t"; done)
+            | while read -r t; do v=${t#android-v}; if [ "$(printf '%s\n0.2.0\n' "$v" | sort -V | head -1)" = "0.2.0" ]; then echo "$t"; fi; done)
           if echo "$tags" | python3 scripts/needs_rebuild.py; then echo "rebuild=true" >> "$GITHUB_OUTPUT"; else echo "rebuild=false" >> "$GITHUB_OUTPUT"; fi
 
       - uses: actions/setup-python@v5

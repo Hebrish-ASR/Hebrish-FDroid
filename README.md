@@ -20,7 +20,7 @@ key above is a separate key that signs only the index.
 ## How it publishes
 
 `.github/workflows/publish.yml` runs on push to `main`, on manual dispatch, on a
-`repository_dispatch` of type `android-release`, and every 6 hours. The scheduled run first
+`repository_dispatch` of type `android-release`, and every hour. The scheduled run first
 checks the live `index-v2.json` (`scripts/needs_rebuild.py`) and does nothing unless an
 Android release is missing from it. A rebuild:
 
@@ -34,7 +34,7 @@ Nothing generated is committed: `fdroid/repo/` is rebuilt each time. `fdroid/tmp
 the Actions cache so each APK's "added" date stays stable; if the cache is evicted the dates
 reset to the rebuild date (cosmetic only).
 
-A new release therefore appears within 6 hours. To publish at once: **Actions → Publish F-Droid
+A new release therefore appears within an hour. To publish at once: **Actions → Publish F-Droid
 repo → Run workflow**, or `gh workflow run publish.yml -R Hebrish-ASR/Hebrish-FDroid`.
 
 ## Inputs
