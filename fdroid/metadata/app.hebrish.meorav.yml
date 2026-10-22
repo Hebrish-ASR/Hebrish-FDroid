@@ -1,0 +1,36 @@
+Categories:
+  - Multimedia
+  - Writing
+License: MIT
+AuthorName: Hebrish
+AuthorWebSite: https://hebrish.app
+WebSite: https://hebrish.app
+SourceCode: https://github.com/Hebrish-ASR/Meorav-App
+IssueTracker: https://github.com/Hebrish-ASR/Meorav-App/issues
+Changelog: https://github.com/Hebrish-ASR/Meorav-App/releases
+
+Name: Meorav (beta)
+Summary: Experimental on-device text to speech in a cloned Hebrish voice
+Description: |-
+  Experimental, public testing. Type some text and Meorav speaks it in Daniel Rosehill's
+  voice: Irish-accented English with Hebrew words such as teudat zehut and misrad hapnim.
+
+  The speech is generated on your phone (Qwen3-TTS through qwentts.cpp, on the CPU). Your
+  text is not sent anywhere. Generation is usually slower than real time and uses about
+  4 GB of RAM while speaking.
+
+  On first use the app downloads the voice model from cdn.hebrish.app: about 1.4 GB
+  (Q4_K_M, the default) or 2.3 GB (Q8_0, for phones with 12 GB of RAM or more). The
+  download can be resumed, is checked before use, and can be deleted from the app.
+
+  You can play the result again, save it as a WAV file, or share it. The app shows how long
+  each run took and its real-time factor.
+
+  Not yet tested on a device: please report problems on the issue tracker. arm64 devices
+  only, Android 9 or later.
+
+  The voice model is for non-commercial use only, under the Hebrish terms of use
+  (https://hebrish.app/terms). The app's code is MIT-licensed; qwentts.cpp is MIT.
+
+AutoUpdateMode: None
+UpdateCheckMode: None

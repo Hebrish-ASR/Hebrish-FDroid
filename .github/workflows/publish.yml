@@ -1,7 +1,7 @@
 name: Publish F-Droid repo
 
-# Rebuilds the repo from the Android releases of Hebrish-ASR/Hebrish-App and
-# Hebrish-ASR/Hebrish-Keyboard and deploys
+# Rebuilds the repo from the Android releases of Hebrish-ASR/Hebrish-App,
+# Hebrish-ASR/Hebrish-Keyboard and Hebrish-ASR/Meorav-App and deploys
 # it to GitHub Pages (https://fdroid.hebrish.app/repo). The scheduled run only rebuilds
 # when a release is missing from the published index; a manual run or a push always does.
 on:
@@ -25,6 +25,7 @@ concurrency:
 env:
   SRC_REPO: Hebrish-ASR/Hebrish-App
   KBD_REPO: Hebrish-ASR/Hebrish-Keyboard
+  TTS_REPO: Hebrish-ASR/Meorav-App
 
 jobs:
   build:
