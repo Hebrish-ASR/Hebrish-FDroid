@@ -43,8 +43,8 @@ Nothing generated is committed: `fdroid/repo/` is rebuilt each time. `fdroid/tmp
 the Actions cache so each APK's "added" date stays stable; if the cache is evicted the dates
 reset to the rebuild date (cosmetic only).
 
-A new release therefore appears within a week at worst. To publish at once, which is the normal route: **Actions → Publish F-Droid
-repo → Run workflow**, or `gh workflow run publish.yml -R Hebrish-ASR/Hebrish-FDroid`.
+A new release therefore appears within a week at worst. To publish at once: push a commit to `main` (see *Verify after publishing*: a manual or dispatched run on an
+unchanged head deploys but is not served).
 
 ## Inputs
 
@@ -83,9 +83,13 @@ curl -s "https://fdroid.hebrish.app/repo/index-v1.json?x=$RANDOM" | python3 -c \
 **Seen 2026-11-10:** a `workflow_dispatch` run (42882704713) built an index with Hebrish 1.028 and 1.029, and its
 deploy reported `succeed`, but 12 minutes later the site still served the 2026-11-09 index (the new APKs
 returned 404). That deploy and the previous two had the same `pages_build_version` (the head commit,
-`46e43f6`). Hypothesis (unconfirmed): Pages kept the deployment it already had for that commit. Test: this
-README commit gives the next deploy a new commit. If a re-dispatch without a new commit stays stale again,
-the publish needs a new commit (or a dispatch from a fresh commit) to take effect.
+`46e43f6`). A push of a new commit (8861a77, run 42885118949) published the same releases, and they were live within
+2 minutes (V, 19:27 UTC). So a deploy whose commit is already deployed is accepted, but Pages keeps serving the old
+site (I: confirmed once).
+
+**Rule:** to publish, push a commit to `main` (an empty one is fine:
+`git commit --allow-empty -m "Publish <app> <version>" && git push`), not a `workflow_dispatch` or
+`repository_dispatch` on an unchanged head. Then verify the live index as above.
 
 ## Hosting
 
