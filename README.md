@@ -71,6 +71,22 @@ C=IL`, valid 30 years. Not in this repo. Copies:
 **Never replace this key.** Every user who added the repo pinned its fingerprint; a new key
 makes their client reject the index, and they would have to remove and re-add the repo.
 
+## Verify after publishing
+
+A green run is not proof. Check the live index:
+
+```bash
+curl -s "https://fdroid.hebrish.app/repo/index-v1.json?x=$RANDOM" | python3 -c \
+  "import json,sys; d=json.load(sys.stdin); print(sorted(p['versionName'] for p in d['packages']['app.hebrish.dictation'])[-3:])"
+```
+
+**Seen 2026-11-10:** a `workflow_dispatch` run (42882704713) built an index with Hebrish 1.028 and 1.029, and its
+deploy reported `succeed`, but 12 minutes later the site still served the 2026-11-09 index (the new APKs
+returned 404). That deploy and the previous two had the same `pages_build_version` (the head commit,
+`46e43f6`). Hypothesis (unconfirmed): Pages kept the deployment it already had for that commit. Test: this
+README commit gives the next deploy a new commit. If a re-dispatch without a new commit stays stale again,
+the publish needs a new commit (or a dispatch from a fresh commit) to take effect.
+
 ## Hosting
 
 GitHub Pages (build type: workflow) with custom domain `fdroid.hebrish.app`: a Cloudflare DNS
